@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1' // For JSON storage
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+// Copy runtime dependencies to build/libs
+task copyLibs(type: Copy) {
+    from configurations.runtimeClasspath
+    into 'build/libs'
+}
+
+build.dependsOn copyLibs
+
+// ---- Run tasks for Server and Client ----
+tasks.register('runServer', JavaExec) {
+    group = 'application'
+    description = 'Run the MailLite server'
+    mainClass.set('com.maillite.server.ServerMain')
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+tasks.register('runClient', JavaExec) {
+    group = 'application'
+    description = 'Run the MailLite client'
+    mainClass.set('com.maillite.client.ClientMain')
+    classpath = sourceSets.main.runtimeClasspath
+}

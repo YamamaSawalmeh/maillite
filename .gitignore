@@ -1,0 +1,18 @@
+# Build artifacts
+build/
+bin/
+*.class
+
+# IDE settings
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Application Data
+storage/
+*.log
+
+# Local chat history
+chat_history_*.txt
+.gradle/
